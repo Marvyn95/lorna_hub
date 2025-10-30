@@ -22,6 +22,24 @@
                         <a href="{{ url_for('home') }}" class="d-flex align-items-end me-4 text-decoration-none">
                             <i class="bi bi-shop" style="font-size: 1rem; color: indigo;"></i>
                             <span class="fw-bold ms-2" style="color: indigo;">Lorna Hub</span>
+                            {% with messages = get_flashed_messages(with_categories=true) %}
+                                {% if messages %}
+                                    <div class="ms-2">
+                                        {% for category, message in messages %}
+                                        <span class="alert alert-{{ category }} py-1 px-2 mb-0" role="alert" style="font-size: 0.9rem; color: indigo; background: #e0e7ff; border: none;" data-bs-delay="8000" data-bs-autohide="true">
+                                        {{ message }}
+                                        </span>
+                                        {% endfor %}
+                                    </div>
+                                    <script>
+                                        setTimeout(function() {
+                                            document.querySelectorAll('.alert').forEach(function(el) {
+                                                el.style.display = 'none';
+                                            });
+                                        }, 8000);
+                                    </script>
+                                {% endif %}
+                            {% endwith %}
                         </a>
                     </div>
                 </div>
