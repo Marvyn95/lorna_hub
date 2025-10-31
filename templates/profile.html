@@ -6,17 +6,89 @@
     <div class="col-md-3 text-center d-flex flex-column">
         <div class="card shadow flex-grow-1" style="background: #e3e3e3; color: indigo; border-radius: 1rem; height:100%;">
             <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
-                <img src="{{ url_for('static', filename='images/all_products.png') }}" alt="Profile Picture" class="rounded-circle mb-3 border border-dark" style="width:150px; height:150px; object-fit:cover;">
+                <img src="{{ url_for('static', filename='images/' + user.profile_pic) }}" alt="Profile Picture" class="rounded-circle mb-3 border border-dark" style="width:150px; height:150px; object-fit:cover;">
                 <h3>{{ user.username }}</h3>
                 <p><strong></strong> {{ user.email }}</p>
                 <p><strong></strong> {{ user.telephone }}</p>
-                <a href="{{ url_for('change_password') }}" class="btn btn-indigo btn-sm mt-2" style="background: indigo; color: #fff;">Change My Password</a>
-                <a href="{{ url_for('edit_profile') }}" class="btn btn-indigo light btn-sm mt-2" style="background: indigo; color: #fff;">Edit Profile</a>
+                <!-- Change Password Button -->
+                <button type="button" class="btn btn-indigo btn-sm mt-2" style="background: indigo; color: #fff;" data-bs-toggle="modal" data-bs-target="#changeMyPasswordModal">
+                  Change My Password
+                </button>
+                <!-- Edit Profile Button -->
+                <button type="button" class="btn btn-indigo light btn-sm mt-2" style="background: indigo; color: #fff;" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                  Edit Profile
+                </button>
+
+                <!-- Change My Password Modal -->
+                <div class="modal fade" id="changeMyPasswordModal" tabindex="-1" aria-labelledby="changeMyPasswordModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="changeMyPasswordModalLabel" style="color: indigo;">Change My Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <form action="{{ url_for('change_password') }}" method="post">
+                      <input type="hidden" name="user_id" value="{{ user._id }}">
+                      <div class="mb-2 d-flex align-items-center">
+                      <label for="current_password" class="form-label me-2 mb-0" style="color: indigo; width: 120px;">Current Password</label>
+                      <input type="password" class="form-control form-control-sm" id="current_password" name="current_password" required>
+                      </div>
+                      <div class="mb-2 d-flex align-items-center">
+                      <label for="new_password" class="form-label me-2 mb-0" style="color: indigo; width: 120px;">New Password</label>
+                      <input type="password" class="form-control form-control-sm" id="new_password" name="new_password" required>
+                      </div>
+                      <div class="mb-2 d-flex align-items-center">
+                      <label for="confirm_password" class="form-label me-2 mb-0" style="color: indigo; width: 120px;">Confirm Password</label>
+                      <input type="password" class="form-control form-control-sm" id="confirm_password" name="confirm_password" required>
+                      </div>
+                      <button type="submit" class="btn btn-warning btn-sm">Change Password</button>
+                    </form>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+
+                <!-- Edit Profile Modal -->
+                <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel" style="color: indigo;">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <form action="{{ url_for('edit_profile') }}" method="post" enctype="multipart/form-data">
+                      <div class="mb-2 d-flex align-items-center">
+                      <input type="hidden" name="user_id" value="{{ user._id }}">
+                        <label for="username" class="form-label me-2 mb-0" style="color: indigo; width: 120px;">Username</label>
+                        <input type="text" class="form-control form-control-sm" id="username" name="username" value="{{ user.username }}" required>
+                      </div>
+                      <div class="mb-2 d-flex align-items-center">
+                        <label for="email" class="form-label me-2 mb-0" style="color: indigo; width: 120px;">Email</label>
+                        <input type="email" class="form-control form-control-sm" id="email" name="email" value="{{ user.email }}" required>
+                      </div>
+                      <div class="mb-2 d-flex align-items-center">
+                        <label for="contact" class="form-label me-2 mb-0" style="color: indigo; width: 120px;">Contact</label>
+                        <input type="text" class="form-control form-control-sm" id="contact" name="contact" value="{{ user.contact }}" required>
+                      </div>
+                      <div class="mb-2 d-flex align-items-center">
+                        <label for="profile_pic" class="form-label me-2 mb-0" style="color: indigo; width: 120px;">Profile Pic</label>
+                        <input type="file" class="form-control form-control-sm" id="profile_pic" name="profile_pic" accept="image/*">
+                      </div>
+                      <div class="text-end">
+                        <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
+                      </div>
+                    </form>
+                    </div>
+                  </div>
+                  </div>
+                </div>
             </div>
         </div>
     </div>
     <div class="col-md-9">
-        <div class="card shadow" style="background: #e3e3e3; border-radius: 1rem; height:100%;">
+        <div class="card" style="background: #e3e3e3; height:100%;">
             <div class="card-body">
                 <h4 class="mb-3" style="background: #e3e3e3; color: indigo;">Users Management</h4>
                 <!-- Add New User Button -->
@@ -165,9 +237,17 @@
                                       </div>
                                       <div class="modal-body">
                                         <!-- Change password form goes here -->
-                                        <form action="{{ url_for('change_user_password', user_id=u._id) }}" method="post">
-                                            <!-- Add your password fields here -->
-                                            <button type="submit" class="btn btn-warning">Change Password</button>
+                                        <form action="{{ url_for('change_user_password') }}" method="post">
+                                          <input type="hidden" name="user_id" value="{{ u._id }}">
+                                          <div class="mb-2 d-flex align-items-center">
+                                            <label for="new_password{{ u._id }}" class="form-label me-2 mb-0" style="color: indigo; width: 90px;">New Password</label>
+                                            <input type="password" class="form-control form-control-sm" id="new_password{{ u._id }}" name="new_password" required>
+                                          </div>
+                                          <div class="mb-2 d-flex align-items-center">
+                                            <label for="confirm_password{{ u._id }}" class="form-label me-2 mb-0" style="color: indigo; width: 90px;">Confirm Password</label>
+                                            <input type="password" class="form-control form-control-sm" id="confirm_password{{ u._id }}" name="confirm_password" required>
+                                          </div>
+                                          <button type="submit" class="btn btn-warning">Change Password</button>
                                         </form>
                                       </div>
                                     </div>

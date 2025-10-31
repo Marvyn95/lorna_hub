@@ -50,6 +50,11 @@
                             <i class="bi bi-house-door me-2" style="font-size: 1rem; color: indigo;"></i>
                             <span class="fw-semibold" style="color: indigo;">Home</span>
                         </a>
+                        <a href="{{ url_for('home') }}" class="d-flex align-items-center me-4 text-decoration-none">
+                            <i class="bi bi-cart me-2" style="font-size: 1rem; color: indigo;"></i>
+                            <span class="fw-semibold" style="color: indigo;">Cart</span>
+                        </a>
+                        {% if user and user.is_authenticated %}
                         <a href="{{ url_for('profile') }}" class="d-flex align-items-center me-4 text-decoration-none">
                             <i class="bi bi-person me-2" style="font-size: 1rem; color: indigo;"></i>
                             <span class="fw-semibold" style="color: indigo;">Profile</span>
@@ -62,10 +67,45 @@
                             <i class="bi bi-cart me-2" style="font-size: 1rem; color: indigo;"></i>
                             <span class="fw-semibold" style="color: indigo;">Orders</span>
                         </a>
-                        <a href="{{ url_for('logout') }}" class="d-flex align-items-center text-decoration-none">
-                            <i class="bi bi-box-arrow-right me-2" style="font-size: 1rem; color: indigo;"></i>
-                            <span class="fw-semibold" style="color: indigo;">Logout</span>
-                        </a>
+                        {% endif %}
+                        {% if user and user.is_authenticated %}
+                            <a href="{{ url_for('logout') }}" class="d-flex align-items-center text-decoration-none">
+                                <i class="bi bi-box-arrow-right me-2" style="font-size: 1rem; color: indigo;"></i>
+                                <span class="fw-semibold" style="color: indigo;">Logout</span>
+                            </a>
+                        {% else %}
+                            <button type="button" class="d-flex align-items-center text-decoration-none btn p-0" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                <i class="bi bi-box-arrow-in-right me-2" style="font-size: 1rem; color: indigo;"></i>
+                                <span class="fw-semibold" style="color: indigo;">Login</span>
+                            </button>
+
+                            <!-- Login Modal -->
+                            <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                  <form method="post" action="{{ url_for('login') }}">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <div class="d-flex align-items-center mb-3">
+                                        <label for="email" class="form-label me-2 mb-0" style="width: 70px; color: indigo;">Email</label>
+                                        <input type="email" class="form-control flex-grow-1" id="email" name="email" required>
+                                      </div>
+                                      <div class="d-flex align-items-center mb-3">
+                                        <label for="password" class="form-label me-2 mb-0" style="width: 70px; color: indigo;">Password</label>
+                                        <input type="password" class="form-control flex-grow-1" id="password" name="password" required>
+                                      </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="submit" class="btn btn-primary">Login</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                        {% endif %}
                     </div>
 
                     <!-- Dropdown menu for small and md screens -->
@@ -81,6 +121,13 @@
                                         Home
                                     </a>
                                 </li>
+                                <li>
+                                <a href="{{ url_for('home') }}" class="d-flex align-items-center me-4 text-decoration-none">
+                                    <i class="bi bi-cart me-2" style="font-size: 1rem; color: indigo;"></i>
+                                    <span class="fw-semibold" style="color: indigo;">Cart</span>
+                                </a>
+                                </li>
+                                {% if user and user.is_authenticated %}
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" href="{{ url_for('profile') }}">
                                         <i class="bi bi-person me-2" style="font-size: 1rem; color: indigo;"></i>
@@ -99,6 +146,7 @@
                                         Orders
                                     </a>
                                 </li>
+                                {% endif %}
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" href="{{ url_for('logout') }}">
                                         <i class="bi bi-box-arrow-right me-2" style="font-size: 1rem; color: indigo;"></i>
